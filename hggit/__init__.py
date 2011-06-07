@@ -55,14 +55,14 @@ except AttributeError:
 
 def _local(path):
     p = urlcls(path).localpath()
-    if (os.path.exists(os.path.join(p, '.git')) and
-        not os.path.exists(os.path.join(p, '.hg'))):
+    if os.path.exists(os.path.join(p, '.hg')):
+        return _oldlocal(path)
+    if os.path.exists(os.path.join(p, '.git')):
         return gitrepo
     # detect a bare repository
     if (os.path.exists(os.path.join(p, 'HEAD')) and
         os.path.exists(os.path.join(p, 'objects')) and
-        os.path.exists(os.path.join(p, 'refs')) and
-        not os.path.exists(os.path.join(p, '.hg'))):
+        os.path.exists(os.path.join(p, 'refs'))):
         return gitrepo
     return _oldlocal(path)
 
